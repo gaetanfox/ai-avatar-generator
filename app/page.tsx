@@ -1,6 +1,7 @@
 'use client'
 import Dropzone from 'react-dropzone'
 import { useState } from 'react'
+import { FaTrashAlt } from 'react-icons/fa'
 export default function Home() {
   const [files, setFiles] = useState<File[]>([])
 
@@ -9,6 +10,12 @@ export default function Home() {
       (file) => !files.some((existingFile) => existingFile.name === file.name)
     )
     setFiles([...files, ...uniqueFiles])
+  }
+
+  const handleDelete = (index: number) => {
+    const newFiles = [...files]
+    newFiles.splice(index, 1)
+    setFiles(newFiles)
   }
 
   return (
@@ -29,6 +36,7 @@ export default function Home() {
             className='appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500'
           />
         </div>
+
         {/* Dropzone */}
         <div className='w-full text-center border-4 border-gray-500 border-dashed rounded-md cursor-pointer mb-2 text-gray-500 py-10'>
           <Dropzone onDrop={handleDrop}>
@@ -43,6 +51,7 @@ export default function Home() {
           </Dropzone>
         </div>
       </section>
+
       {/* Images preview */}
       <section className='grid grid-cols-3 gap-4 mt-4'>
         {files.map((file, index) => (
@@ -52,6 +61,13 @@ export default function Home() {
               alt={file.name}
               className='object-cover w-full h-full'
             />
+            {/* Delete icon */}
+            <button
+              onClick={() => handleDelete(index)}
+              className='absolute top-0 right-0 p-2 bg-yellow-500 text-black'
+            >
+              <FaTrashAlt />
+            </button>
             <div className='absolute bottom-0 left-0 right-0 bg-red-900 bg-opacity-50 text-white p-2'>
               {file.name}
             </div>
